@@ -4,6 +4,15 @@ El 9 de diciembre abren las primeras raids de **WoW Forever**: The Barrow Deeps 
 
 [Read in English](README.en.md)
 
+**Contenido**
+
+- [Qué muestra](#qué-muestra)
+- [Qué manda y qué recibe](#qué-manda-y-qué-recibe)
+- [Instalar](#instalar)
+- [Cómo se probó](#cómo-se-probó)
+- [Desarrollo](#desarrollo)
+- [Apoyar](#apoyar)
+
 ## Qué muestra
 
 - **La cuenta regresiva** al 9/12.
@@ -46,5 +55,9 @@ python tools/check_api.py --bir ../BlizzardInterfaceResources --ui ../wow-ui-sou
 ```
 
 Fuentes: [anuncio de las raids](https://www.gamerfuzion.com/world-of-warcraft-forever-raids-december-9-barrow-deeps-hyjal-summit-onyxia-attunement/) · [la sintonización de Onyxia en Forever](https://conquestcapped.com/guides/wow-forever/wow-forever-onyxia-attunement/).
+
+## Apoyar
+
+Todo esto es gratis y de código abierto, y va a seguir así: no hay funciones pagas ni nada antes para quien aporta. Si te sirvió y querés bancar el tiempo de mantenerlo (con cada parche de Blizzard hay que actualizar los datos y arreglar lo que se rompe), podés hacerlo en [Patreon](https://www.patreon.com/cw/DoblePupi). Gracias ♥
 
 Sin relación con Blizzard Entertainment. World of Warcraft es marca registrada de Blizzard Entertainment, Inc. Licencia MIT.

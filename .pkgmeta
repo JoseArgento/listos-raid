@@ -1,0 +1,10 @@
+package-as: ListosParaLaRaid
+
+move-folders:
+  ListosParaLaRaid/ListosParaLaRaid: ListosParaLaRaid
+
+ignore:
+  - tests
+  - tools
+  - pyproject.toml
+  - README.en.md

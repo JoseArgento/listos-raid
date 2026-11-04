@@ -1,0 +1,20 @@
+## Interface: 16001
+## Title: Listos para la raid
+## Notes: Who in your guild is ready for the raids of December 9: level, the Drakefire Amulet and fire resistance.
+## Notes-esES: Quién de tu guild está listo para las raids del 9 de diciembre: nivel, el Amuleto de Fuego Dracónico y resistencia al fuego.
+## Notes-esMX: Quién de tu guild está listo para las raids del 9 de diciembre: nivel, el Amuleto de Fuego Dracónico y resistencia al fuego.
+## Author: José Argento
+## Version: @project-version@
+## SavedVariables: ListosParaLaRaidDB
+## IconTexture: Interface\Icons\INV_Misc_Note_02
+## AddonCompartmentFunc: ListosParaLaRaid_OnAddonCompartmentClick
+## AddonCompartmentFuncOnEnter: ListosParaLaRaid_OnAddonCompartmentEnter
+## AddonCompartmentFuncOnLeave: ListosParaLaRaid_OnAddonCompartmentLeave
+## Category: Raids
+
+Locales.lua
+Data.lua
+Core.lua
+Sync.lua
+UI.lua
+Events.lua

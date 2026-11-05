@@ -22,6 +22,7 @@ local handlers = {
 	end,
 }
 
+local onSlash -- the /listos handler, defined below; guarded once the saved variables are in
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("ADDON_LOADED")
 frame:RegisterEvent("PLAYER_LOGIN")
@@ -30,6 +31,8 @@ frame:SetScript("OnEvent", function(_, event, ...)
 		if ... == ADDON then
 			ns.InitDB()
 			frame:UnregisterEvent("ADDON_LOADED")
+			-- from here on a Lua error in a handler is kept, not thrown (see /listos errores)
+			SlashCmdList.LISTOSPARALARAID = ns.guard.Install(frame, onSlash)
 		end
 	elseif event == "PLAYER_LOGIN" then
 		C_ChatInfo.RegisterAddonMessagePrefix(ns.PREFIX)
@@ -50,7 +53,7 @@ frame:SetScript("OnEvent", function(_, event, ...)
 end)
 
 SLASH_LISTOSPARALARAID1 = "/listos"
-SlashCmdList.LISTOSPARALARAID = function(msg)
+onSlash = function(msg)
 	msg = strtrim((msg or ""):lower())
 	local verb, arg = msg:match("^(%S+)%s*(.*)$")
 	if msg == "copiar" or msg == "copy" then
@@ -63,12 +66,15 @@ SlashCmdList.LISTOSPARALARAID = function(msg)
 		else
 			ns.SetMinimapShown(ns.db.settings.minimap == false)
 		end
+	elseif msg == "errores" or msg == "errors" then
+		ns.UI.Errors()
 	elseif msg == "help" or msg == "ayuda" then
 		ns.Print(L.HELP)
 	else
 		ns.UI.Toggle()
 	end
 end
+SlashCmdList.LISTOSPARALARAID = onSlash
 
 function ListosParaLaRaid_OnAddonCompartmentClick()
 	ns.UI.Toggle()

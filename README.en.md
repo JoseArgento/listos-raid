@@ -19,6 +19,8 @@ In Forever the amulet is per character and the "Chipped" one is not sold, so eve
 
 **Tested**: every API checked against Forever 1.60.1 (`tools/check_api.py`); fire resistance is read the way Forever's character sheet does; forever-lint only shows the FL012 note (handled); Addon Sentry finds nothing; 33 tests in Lua 5.1 with several guildmates. **In the client** (since launch): the page, your own status, the countdown, "Copy list" and the minimap button, without a guild. **Not seen yet**: the attunement quest IDs are Classic's as Forever guides list them (with the amulet in hand you show as ready anyway), the exact opening hour, the 100 fire resistance target (a common reference, not official), and the list with a whole guild running it.
 
+**If something breaks:** `/listos errores` shows the addon's last error (the last 10 are kept, no popups) to copy into a GitHub issue.
+
 ## Support
 
 All of this is free and open source, and it stays that way: no paid features, nothing early for supporters. If it helped you and you want to cover the time it takes to keep it working (every Blizzard patch means refreshing the data and fixing what broke), you can do that on [Patreon](https://www.patreon.com/cw/DoblePupi). Thanks ♥

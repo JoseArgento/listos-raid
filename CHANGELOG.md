@@ -2,6 +2,7 @@
 
 ## 0.2.0 (unreleased)
 
+- **Its own errors, kept** (Pergamino 5): a Lua error in a handler no longer reaches the player as a popup; it is kept in `ListosParaLaRaidDB.errors` (last 10), said once in the chat, and `/listos errores` opens a card to copy it into a GitHub issue.
 - **Minimap button** of our own (Pergamino 2): a click opens the page, drag it around the minimap; `/listos minimapa on|off`. Pergamino 2 also brings scroll bars only when the list overflows.
 - **Your own row** is always in the list, with or without a guild (before, a player without a guild saw an empty list).
 - Singular texts ("1 level to go", "tomorrow"); clicking the page brings it over any other open book.

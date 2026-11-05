@@ -26,6 +26,15 @@ function ns.InitDB()
 	if db.settings.lang and db.settings.lang ~= ns.lang then
 		ns.SetLanguage(db.settings.lang)
 	end
+	-- the addon's own errors, kept here and shown with /listos errores (Pergamino.Guard)
+	db.errors = type(db.errors) == "table" and db.errors or {}
+	ns.guard = Pergamino.Guard(ADDON, db, {
+		slash = "/listos",
+		chat = function()
+			ns.Print(L.ERR_NOTICE)
+		end,
+		L = { title = L.ERR_TITLE, empty = L.ERR_EMPTY, clear = L.ERR_CLEAR, copy = L.ERR_COPY },
+	})
 end
 
 -- "auto", "es" or "en": saved, applied at once, and the page redraws its texts.

@@ -55,6 +55,8 @@ Copiá la carpeta `ListosParaLaRaid` a `Interface\AddOns\`, dentro de la carpeta
 - **La resistencia al fuego "objetivo"** (100) es una referencia común, no un número oficial de Blizzard.
 - La lista con una guild entera usando el addon.
 
+**Si algo falla:** `/listos errores` muestra el último error del addon (se guardan los últimos 10, sin popups) para copiarlo en un issue de GitHub.
+
 ## Desarrollo
 
 ```bash

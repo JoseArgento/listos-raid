@@ -325,3 +325,23 @@ def test_the_minimap_button_opens_the_page_and_remembers_where_it_was(me):
     assert b2._shown is False and b2.angle == 90
     again.lua.globals().SlashCmdList.LISTOSPARALARAID("minimapa")  # no word: switch it back on
     assert b2._shown is True
+
+
+def test_a_handler_error_is_kept_and_shown_not_thrown():
+    me = Client()
+    me.login()
+    # a broken handler in the event frame: the guard keeps the error instead of a popup
+    me.run("ns.ShareSoon = function() error('se rompio el aviso') end")
+    me.fire("PLAYER_LEVEL_UP", 14)  # does not raise
+    errs = me.run("return ns.db.errors")
+    assert len(errs) == 1 and "se rompio el aviso" in errs[1].message and errs[1].label == "PLAYER_LEVEL_UP"
+    assert sum(1 for line in me.m.chat.values() if "tuvo un error" in line or "had an error" in line) == 1
+    me.fire("PLAYER_LEVEL_UP", 15)
+    assert me.run("return ns.db.errors[1].count") == 2  # the same error, counted, said no more
+    assert sum(1 for line in me.m.chat.values() if "tuvo un error" in line or "had an error" in line) == 1
+    # /listos errores opens the card with the text to copy; Clear empties it
+    me.lua.globals().SlashCmdList.LISTOSPARALARAID("errores")
+    assert me.run("return ns.UI.errorsCard:IsShown()") is True
+    assert "se rompio el aviso" in me.run("return ns.UI.errorsCard.page.area.box._text")
+    me.run("ns.UI.errorsCard.page.clear:GetScript('OnClick')()")
+    assert me.run("return #ns.db.errors") == 0

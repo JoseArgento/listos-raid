@@ -280,6 +280,18 @@ function UI.Toggle()
 	f:SetShown(not f:IsShown())
 end
 
+-- The addon's own errors (Pergamino.Guard), on a card to copy them into an issue.
+function UI.Errors()
+	if not UI.errorsCard then
+		local card = P.Card(ADDON .. "ErrorsCard", 460, 360, L.ERR_TITLE)
+		card.page = ns.guard.Page(card.body)
+		UI.errorsCard = card
+	end
+	UI.errorsCard.page.Refresh()
+	UI.errorsCard:Show()
+	return UI.errorsCard
+end
+
 ns.On("guild", UI.Refresh)
 ns.On("status", UI.Refresh)
 ns.On("lang", UI.ApplyTexts)

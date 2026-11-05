@@ -37,10 +37,13 @@ local en = {
 	COPY = "Copy list",
 	COPY_PROMPT = "Copy with Ctrl+C (name, level, amulet, attunement step, fire resistance):",
 	TAG_READY = "ready for Onyxia",
-	HELP = "/listos opens the page. /listos copiar gives you the guild list as text. /listos idioma es|en|auto picks the language.",
+	HELP = "/listos opens the page. /listos copiar gives you the guild list as text. /listos idioma es|en|auto picks the language. /listos minimapa on|off shows or hides the minimap button.",
 	LANG_SET = "Language: %s.",
 	LANG_AUTO = "the client's",
 	COMPARTMENT = "Click to see who is ready.",
+	MINIMAP_TIP = "Click: who is ready. Drag to move it around the minimap. /listos minimapa off hides it.",
+	MINIMAP_ON = "Minimap button on.",
+	MINIMAP_OFF = "Minimap button off (/listos minimapa on brings it back).",
 }
 
 local es = {
@@ -77,10 +80,13 @@ local es = {
 	COPY = "Copiar lista",
 	COPY_PROMPT = "Copiá con Ctrl+C (nombre, nivel, amuleto, paso de la sintonización, resistencia al fuego):",
 	TAG_READY = "lista para Onyxia",
-	HELP = "/listos abre la página. /listos copiar te da la lista de la guild como texto. /listos idioma es|en|auto elige el idioma.",
+	HELP = "/listos abre la página. /listos copiar te da la lista de la guild como texto. /listos idioma es|en|auto elige el idioma. /listos minimapa on|off muestra o esconde el botón del minimapa.",
 	LANG_SET = "Idioma: %s.",
 	LANG_AUTO = "el del cliente",
 	COMPARTMENT = "Clic para ver quién está listo.",
+	MINIMAP_TIP = "Clic: quién está listo. Arrastralo para moverlo alrededor del minimapa. /listos minimapa off lo esconde.",
+	MINIMAP_ON = "Botón del minimapa encendido.",
+	MINIMAP_OFF = "Botón del minimapa apagado (/listos minimapa on lo devuelve).",
 }
 
 local L = {}

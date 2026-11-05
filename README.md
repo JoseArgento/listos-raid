@@ -19,7 +19,8 @@ El 9 de diciembre abren las primeras raids de **WoW Forever**: The Barrow Deeps 
 - **Tu estado:** nivel, si tenés el Amuleto de Fuego Dracónico (en bolsas o banco), en qué paso de la sintonización de Onyxia vas (16 pasos en la Alianza, 14 en la Horda) y tu resistencia al fuego. Abajo, para qué raids ya estás listo.
 - **Tu guild:** cada uno con nivel, amuleto o paso, y fuego, con los listos arriba. Arriba de todo, "Listos: 12 para Onyxia, 20 en nivel 60".
 - **Copiar lista:** la guild como texto (`nombre,nivel,amuleto,paso,pasos,fuego`) para pegar en una planilla o en las notas de RaidCalendar.
-- `/listos` abre la página, `/listos copiar` te da la lista, `/listos idioma es` (o `en`, o `auto`) elige el idioma aunque el cliente esté en otro.
+- `/listos` abre la página, `/listos copiar` te da la lista, `/listos idioma es` (o `en`, o `auto`) elige el idioma aunque el cliente esté en otro, y `/listos minimapa off` esconde el botón del minimapa (clic: abre la página; se arrastra alrededor del minimapa).
+- Tu propia fila está siempre en la lista, tengas guild o no.
 
 ## Cómo se ve
 
@@ -42,7 +43,7 @@ Copiá la carpeta `ListosParaLaRaid` a `Interface\AddOns\`, dentro de la carpeta
 **Probado:**
 - ✅ Cada función y evento existe en Forever 1.60.1 (`tools/check_api.py` contra los dumps de [Ketho/BlizzardInterfaceResources](https://github.com/Ketho/BlizzardInterfaceResources) y la UI de [Gethe/wow-ui-source](https://github.com/Gethe/wow-ui-source), rama `forever`). La resistencia se lee igual que la ficha de personaje de Forever: `UnitResistance(unidad, Enum.Damageclass.Fire)`, tercer valor.
 - ✅ [forever-lint](https://github.com/JoseArgento/forever-lint): solo la nota FL012 (cuentas de prueba), que el addon ya maneja. [Addon Sentry](https://github.com/JoseArgento/addon-sentry): "Sin señales de riesgo".
-- ✅ **28 tests** en Lua 5.1, con varios jugadores de la misma guild pasándose el estado.
+- ✅ **30 tests** en Lua 5.1, con varios jugadores de la misma guild pasándose el estado.
 
 **Sin probar ⏳** (no tengo el cliente de Forever):
 - **Los IDs de las misiones** de la sintonización son los de Classic, como los listan las guías de Forever. Si Forever cambió alguno, ese paso no se marca, pero con el amuleto en la mano te da listo igual.

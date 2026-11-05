@@ -305,3 +305,23 @@ def test_below_the_chain_level_the_window_says_what_comes_first(me):
     me.m.player.level = 50
     mine = list(me.lines().mine.values())
     assert any("Attunement: step" in ln for ln in mine) and any("Fire resistance" in ln for ln in mine)
+
+
+def test_the_minimap_button_opens_the_page_and_remembers_where_it_was(me):
+    b = me.lua.globals().ListosParaLaRaidMinimapButton
+    assert b is not None and b._shown is True
+    assert b.icon.texture.endswith("ListosParaLaRaid\\Media\\icon")
+    me.run("ns.MinimapButton():GetScript('OnClick')(ns.MinimapButton(), 'LeftButton')")
+    assert me.run("return ns.UI.frame:IsShown()")
+    me.run(
+        "MOCK.cursorX, MOCK.cursorY = 1000, 700; local b = ns.MinimapButton();"
+        " b:GetScript('OnDragStart')(b); b:GetScript('OnUpdate')(b); b:GetScript('OnDragStop')(b)"
+    )
+    assert me.run("return ns.db.settings.minimapAngle") == 90
+    me.lua.globals().SlashCmdList.LISTOSPARALARAID("minimapa off")
+    assert b._shown is False and me.run("return ns.db.settings.minimap") is False
+    again = Client(saved=me.m.savedVariables("ListosParaLaRaidDB")).login()
+    b2 = again.lua.globals().ListosParaLaRaidMinimapButton
+    assert b2._shown is False and b2.angle == 90
+    again.lua.globals().SlashCmdList.LISTOSPARALARAID("minimapa")  # no word: switch it back on
+    assert b2._shown is True

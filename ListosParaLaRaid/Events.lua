@@ -36,6 +36,7 @@ frame:SetScript("OnEvent", function(_, event, ...)
 		for e in pairs(handlers) do
 			frame:RegisterEvent(e)
 		end
+		ns.MinimapButton()
 		-- a moment after login, when the guild and the quest log are there
 		C_Timer.After(8, function()
 			if ns.CanSend() then
@@ -56,6 +57,12 @@ SlashCmdList.LISTOSPARALARAID = function(msg)
 		ns.UI.Copy()
 	elseif verb == "idioma" or verb == "lang" then
 		ns.ChooseLanguage(arg)
+	elseif verb == "minimapa" or verb == "minimap" then
+		if arg == "on" or arg == "off" then
+			ns.SetMinimapShown(arg == "on")
+		else
+			ns.SetMinimapShown(ns.db.settings.minimap == false)
+		end
 	elseif msg == "help" or msg == "ayuda" then
 		ns.Print(L.HELP)
 	else

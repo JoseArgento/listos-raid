@@ -270,11 +270,20 @@ function Frame:Insert(t)
 	end
 end
 function Frame:SetFocus()
+	if MOCK.focus and MOCK.focus ~= self then
+		MOCK.focus:ClearFocus()
+	end
 	MOCK.focus = self
+	if self._scripts.OnEditFocusGained then
+		self._scripts.OnEditFocusGained(self)
+	end
 end
 function Frame:ClearFocus()
 	if MOCK.focus == self then
 		MOCK.focus = nil
+		if self._scripts.OnEditFocusLost then
+			self._scripts.OnEditFocusLost(self)
+		end
 	end
 end
 function Frame:HasFocus()
@@ -300,6 +309,18 @@ function Frame:SetWidth(w)
 end
 function Frame:SetHeight(h)
 	self.height = h
+end
+function Frame:GetCenter()
+	return self._cx or 0, self._cy or 0
+end
+function Frame:GetEffectiveScale()
+	return self._scale or 1
+end
+function Frame:SetMask(path)
+	self.mask = path
+end
+function Frame:SetCursorPosition(n)
+	self._cursor = n
 end
 function Frame:GetHeight()
 	return self.height or 100
@@ -347,6 +368,9 @@ function Frame:SetDataProvider(provider)
 			self.rows[i] = row
 			self.view.init(row, item)
 		end
+	end
+	if self.managedBar and self.view then
+		self.managedBar:SetShown(#self.data * (self.view.extent or 0) > self:GetHeight())
 	end
 end
 function Frame:ForEachFrame(fn)
@@ -406,6 +430,11 @@ function CreateFrame(kind, name, parent, template)
 end
 
 UIParent = newObject("Frame", "UIParent")
+Minimap = newObject("Frame", "Minimap")
+Minimap.width, Minimap.height, Minimap._cx, Minimap._cy = 140, 140, 1000, 500
+function GetCursorPosition()
+	return MOCK.cursorX or 0, MOCK.cursorY or 0
+end
 GameTooltip = newObject("GameTooltip", "GameTooltip")
 ItemRefTooltip = newObject("GameTooltip", "ItemRefTooltip")
 DEFAULT_CHAT_FRAME = newObject("ScrollingMessageFrame", "ChatFrame1")
@@ -505,6 +534,10 @@ ScrollUtil = {
 		box.view = view
 	end,
 	RegisterScrollBoxWithScrollBar = function() end,
+	-- like the client's: the bar shows only while the rows overflow the box (checked when data is set)
+	AddManagedScrollBarVisibilityBehavior = function(box, bar)
+		box.managedBar = bar
+	end,
 }
 function PanelTemplates_SetNumTabs(f, n)
 	f.numTabs = n

@@ -37,7 +37,8 @@ function ns.ChooseLanguage(mode)
 end
 
 function ns.Me()
-	return UnitName("player")
+	-- one value: UnitName also returns the realm, which would spill into table.insert and the like
+	return (UnitName("player"))
 end
 
 function ns.GuildKey()

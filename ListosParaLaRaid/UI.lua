@@ -119,7 +119,7 @@ local function copyCard()
 	if UI.card then
 		return UI.card
 	end
-	local card = P.Card(ADDON .. "CopyCard", 440, 320, L.COPY)
+	local card = P.Card(ADDON .. "CopyCard", 440, 220, L.COPY)
 	local hint = P.Label(card.body, L.COPY_PROMPT, "small")
 	hint:SetPoint("TOPLEFT")
 	hint:SetPoint("TOPRIGHT")

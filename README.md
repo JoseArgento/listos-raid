@@ -4,6 +4,8 @@ El 9 de diciembre abren las primeras raids de **WoW Forever**: The Barrow Deeps 
 
 [Read in English](README.en.md)
 
+![Listos para la raid en el juego](docs/libro.png)
+
 **Contenido**
 
 - [Qué muestra](#qué-muestra)
@@ -43,13 +45,15 @@ Copiá la carpeta `ListosParaLaRaid` a `Interface\AddOns\`, dentro de la carpeta
 **Probado:**
 - ✅ Cada función y evento existe en Forever 1.60.1 (`tools/check_api.py` contra los dumps de [Ketho/BlizzardInterfaceResources](https://github.com/Ketho/BlizzardInterfaceResources) y la UI de [Gethe/wow-ui-source](https://github.com/Gethe/wow-ui-source), rama `forever`). La resistencia se lee igual que la ficha de personaje de Forever: `UnitResistance(unidad, Enum.Damageclass.Fire)`, tercer valor.
 - ✅ [forever-lint](https://github.com/JoseArgento/forever-lint): solo la nota FL012 (cuentas de prueba), que el addon ya maneja. [Addon Sentry](https://github.com/JoseArgento/addon-sentry): "Sin señales de riesgo".
-- ✅ **30 tests** en Lua 5.1, con varios jugadores de la misma guild pasándose el estado.
+- ✅ **33 tests** en Lua 5.1, con varios jugadores de la misma guild pasándose el estado.
 
-**Sin probar ⏳** (no tengo el cliente de Forever):
+**En el cliente** (desde el lanzamiento): la página, el estado propio, la cuenta regresiva, "Copiar lista" y el botón del minimapa, sin guild.
+
+**Todavía sin ver ⏳:**
 - **Los IDs de las misiones** de la sintonización son los de Classic, como los listan las guías de Forever. Si Forever cambió alguno, ese paso no se marca, pero con el amuleto en la mano te da listo igual.
 - **La hora** en que abren las raids: depende del reinicio semanal de cada región. El addon cuenta días.
 - **La resistencia al fuego "objetivo"** (100) es una referencia común, no un número oficial de Blizzard.
-- Cómo se ve la página de verdad en el cliente: la piel está verificada solo en una maqueta y con el mock de Lua (fuentes TTF por `SetFont`, texturas TGA, el sello, la tarjeta).
+- La lista con una guild entera usando el addon.
 
 ## Desarrollo
 

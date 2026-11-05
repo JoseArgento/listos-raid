@@ -4,6 +4,8 @@ On December 9 the first **WoW Forever** raids open: The Barrow Deeps (10 players
 
 [Leer en castellano](README.md)
 
+![Ready for the raid in the game](docs/libro.png)
+
 - **Countdown** to 12/9.
 - **You:** level, whether you hold the Drakefire Amulet (bags or bank), your step in Onyxia's attunement (16 for the Alliance, 14 for the Horde), fire resistance, and which raids you are ready for.
 - **Your guild:** everyone's level, amulet or step, and fire, ready players first, with "Ready: 12 for Onyxia, 20 at level 60" on top.
@@ -15,7 +17,7 @@ In Forever the amulet is per character and the "Chipped" one is not sold, so eve
 
 **What it sends:** one line of numbers on the GUILD channel only (`S|1|60|1|16|16|130`), when something changed or someone asks. Only numbers in sensible ranges are kept, at most 5 messages per 10 seconds per sender, up to 1000 people. Nothing received is run. Trial accounts cannot send addon messages: the addon notices and only listens.
 
-**Tested**: every API checked against Forever 1.60.1 (`tools/check_api.py`); fire resistance is read the way Forever's character sheet does; forever-lint only shows the FL012 note (handled); Addon Sentry finds nothing; 30 tests in Lua 5.1 with several guildmates. **Not tested in the game**: the attunement quest IDs are Classic's as Forever guides list them (with the amulet in hand you show as ready anyway), the exact opening hour, the 100 fire resistance target (a common reference, not official), how the minimap button sits on the round minimap, and how the page really looks in the client (the skin is verified only in a mock-up and the Lua test double).
+**Tested**: every API checked against Forever 1.60.1 (`tools/check_api.py`); fire resistance is read the way Forever's character sheet does; forever-lint only shows the FL012 note (handled); Addon Sentry finds nothing; 33 tests in Lua 5.1 with several guildmates. **In the client** (since launch): the page, your own status, the countdown, "Copy list" and the minimap button, without a guild. **Not seen yet**: the attunement quest IDs are Classic's as Forever guides list them (with the amulet in hand you show as ready anyway), the exact opening hour, the 100 fire resistance target (a common reference, not official), and the list with a whole guild running it.
 
 ## Support
 

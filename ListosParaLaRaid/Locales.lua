@@ -1,6 +1,9 @@
 local _, ns = ...
 
-local L = {
+-- English is the fallback and the whole Spanish set is complete. ns.L is one table that gets refilled when
+-- the language changes (settings.lang: "auto" follows the client, or "es" / "en"), so every file's
+-- `local L = ns.L` keeps working; static texts on screen are redrawn by the "lang" topic.
+local en = {
 	BINDING_TOGGLE = "Open / close",
 	TITLE = "Ready for the raid",
 	COUNTDOWN = "Raids open on December 9: %d days to go",
@@ -31,7 +34,10 @@ local L = {
 	ROW_FIRE = "fire %d",
 	COPY = "Copy list",
 	COPY_PROMPT = "Copy with Ctrl+C (name, level, amulet, attunement step, fire resistance):",
-	HELP = "/listos opens the panel. /listos copiar gives you the guild list as text.",
+	TAG_READY = "ready for Onyxia",
+	HELP = "/listos opens the page. /listos copiar gives you the guild list as text. /listos idioma es|en|auto picks the language.",
+	LANG_SET = "Language: %s.",
+	LANG_AUTO = "the client's",
 	COMPARTMENT = "Click to see who is ready.",
 }
 
@@ -66,14 +72,37 @@ local es = {
 	ROW_FIRE = "fuego %d",
 	COPY = "Copiar lista",
 	COPY_PROMPT = "Copiá con Ctrl+C (nombre, nivel, amuleto, paso de la sintonización, resistencia al fuego):",
-	HELP = "/listos abre el panel. /listos copiar te da la lista de la guild como texto.",
+	TAG_READY = "lista para Onyxia",
+	HELP = "/listos abre la página. /listos copiar te da la lista de la guild como texto. /listos idioma es|en|auto elige el idioma.",
+	LANG_SET = "Idioma: %s.",
+	LANG_AUTO = "el del cliente",
 	COMPARTMENT = "Clic para ver quién está listo.",
 }
 
-local locale = GetLocale()
-if locale == "esES" or locale == "esMX" then
-	for k, v in pairs(es) do
+local L = {}
+ns.L = L
+ns.LANGS = { auto = true, es = true, en = true }
+
+-- Fill L for a language: "es", "en", or "auto" (the client's: Spanish on esES/esMX, English otherwise).
+function ns.SetLanguage(mode)
+	mode = ns.LANGS[mode] and mode or "auto"
+	local locale = GetLocale()
+	local spanish = mode == "es" or (mode == "auto" and (locale == "esES" or locale == "esMX"))
+	for k in pairs(L) do
+		L[k] = nil
+	end
+	for k, v in pairs(en) do
 		L[k] = v
 	end
+	if spanish then
+		for k, v in pairs(es) do
+			L[k] = v
+		end
+	end
+	ns.lang = mode
+	if ns.Fire then -- Core.lua loads after this file; the first fill has nobody listening yet
+		ns.Fire("lang", mode)
+	end
 end
-ns.L = L
+
+ns.SetLanguage("auto")

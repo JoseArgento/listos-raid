@@ -12,6 +12,7 @@
 ## AddonCompartmentFuncOnLeave: ListosParaLaRaid_OnAddonCompartmentLeave
 ## Category: Raids
 
+Libs\Pergamino\Pergamino.lua
 Locales.lua
 Data.lua
 Core.lua

@@ -19,7 +19,11 @@ El 9 de diciembre abren las primeras raids de **WoW Forever**: The Barrow Deeps 
 - **Tu estado:** nivel, si tenés el Amuleto de Fuego Dracónico (en bolsas o banco), en qué paso de la sintonización de Onyxia vas (16 pasos en la Alianza, 14 en la Horda) y tu resistencia al fuego. Abajo, para qué raids ya estás listo.
 - **Tu guild:** cada uno con nivel, amuleto o paso, y fuego, con los listos arriba. Arriba de todo, "Listos: 12 para Onyxia, 20 en nivel 60".
 - **Copiar lista:** la guild como texto (`nombre,nivel,amuleto,paso,pasos,fuego`) para pegar en una planilla o en las notas de RaidCalendar.
-- `/listos` abre el panel, `/listos copiar` te da la lista.
+- `/listos` abre la página, `/listos copiar` te da la lista, `/listos idioma es` (o `en`, o `auto`) elige el idioma aunque el cliente esté en otro.
+
+## Cómo se ve
+
+Una sola página de pergamino dentro de una tapa de cuero, con tinta y tipografía de manuscrito (Alegreya y Cinzel, licencia OFL, van dentro del addon): la cuenta regresiva en grande, tu estado en tinta (verde o carmesí para el amuleto), la guild como lista con los listos arriba y un sello dorado para quien ya puede entrar a Onyxia, y "Copiar lista" en una tarjeta de pergamino. El sello de lacre cierra. Es la misma piel que usan Bitácora, Recordame, el Bingo y Taller: la librería [Pergamino](https://github.com/JoseArgento/pergamino), que viene copiada en `Libs/Pergamino` (texturas propias, nada de arte de Blizzard).
 
 En Forever el amuleto es **por personaje** y no se vende la versión "Chipped" de otros Classic, así que cada uno tiene que hacer la cadena.
 
@@ -38,13 +42,13 @@ Copiá la carpeta `ListosParaLaRaid` a `Interface\AddOns\`, dentro de la carpeta
 **Probado:**
 - ✅ Cada función y evento existe en Forever 1.60.1 (`tools/check_api.py` contra los dumps de [Ketho/BlizzardInterfaceResources](https://github.com/Ketho/BlizzardInterfaceResources) y la UI de [Gethe/wow-ui-source](https://github.com/Gethe/wow-ui-source), rama `forever`). La resistencia se lee igual que la ficha de personaje de Forever: `UnitResistance(unidad, Enum.Damageclass.Fire)`, tercer valor.
 - ✅ [forever-lint](https://github.com/JoseArgento/forever-lint): solo la nota FL012 (cuentas de prueba), que el addon ya maneja. [Addon Sentry](https://github.com/JoseArgento/addon-sentry): "Sin señales de riesgo".
-- ✅ **25 tests** en Lua 5.1, con varios jugadores de la misma guild pasándose el estado.
+- ✅ **28 tests** en Lua 5.1, con varios jugadores de la misma guild pasándose el estado.
 
 **Sin probar ⏳** (no tengo el cliente de Forever):
 - **Los IDs de las misiones** de la sintonización son los de Classic, como los listan las guías de Forever. Si Forever cambió alguno, ese paso no se marca, pero con el amuleto en la mano te da listo igual.
 - **La hora** en que abren las raids: depende del reinicio semanal de cada región. El addon cuenta días.
 - **La resistencia al fuego "objetivo"** (100) es una referencia común, no un número oficial de Blizzard.
-- Cómo se ve el panel.
+- Cómo se ve la página de verdad en el cliente: la piel está verificada solo en una maqueta y con el mock de Lua (fuentes TTF por `SetFont`, texturas TGA, el sello, la tarjeta).
 
 ## Desarrollo
 

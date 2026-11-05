@@ -21,7 +21,19 @@ function ns.InitDB()
 	local db = ListosParaLaRaidDB
 	db.version = 1
 	db.guilds = type(db.guilds) == "table" and db.guilds or {}
+	db.settings = type(db.settings) == "table" and db.settings or {}
 	ns.db = db
+	if db.settings.lang and db.settings.lang ~= ns.lang then
+		ns.SetLanguage(db.settings.lang)
+	end
+end
+
+-- "auto", "es" or "en": saved, applied at once, and the page redraws its texts.
+function ns.ChooseLanguage(mode)
+	mode = ns.LANGS[mode] and mode or "auto"
+	ns.db.settings.lang = mode
+	ns.SetLanguage(mode)
+	ns.Print(L.LANG_SET:format(mode == "auto" and L.LANG_AUTO or mode))
 end
 
 function ns.Me()

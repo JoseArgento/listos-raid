@@ -208,13 +208,65 @@ def test_copy_list(me):
     me.lua.globals().SlashCmdList.LISTOSPARALARAID("copiar")
 
 
-def test_the_panel(me):
+def test_the_page_is_a_single_parchment_book(me):
     me.receive("S|1|60|1|16|16|130")
     me.lua.globals().SlashCmdList.LISTOSPARALARAID("")
     f = me.ns.UI.frame
-    assert f.IsShown(f)
-    assert "Ana" in f.rows[1].GetText(f.rows[1])
+    assert f.IsShown(f) and f.single is True and f.right is None
+    assert "leather" in str(f.leather.texture) and "page" in str(f.pageL.texture) and f.spine is None
+    assert f.title.GetText(f.title) == "Ready for the raid"
     assert "Drakefire Amulet" in f.mine[2].GetText(f.mine[2])
+    assert "34 days" in f.countdown.GetText(f.countdown) or "days to go" in f.countdown.GetText(f.countdown)
+    # the guild lives in a list whose rows carry name, level, step/amulet and fire; Ana is ready for Onyxia
+    rows = f.list.box.rows
+    assert len(rows) == 1
+    assert rows[1].name.GetText(rows[1].name) == "Ana" and rows[1].level.GetText(rows[1].level) == "60"
+    assert "amulet" in rows[1].attune.GetText(rows[1].attune) and "fire 130" in rows[1].fire.GetText(rows[1].fire)
+    assert rows[1].tag._shown is True
+    # a guildmate who is not ready gets no tag and sorts after Ana
+    me.receive("S|1|58|0|5|16|20", sender="Beto-Forever")
+    rows = f.list.box.rows
+    assert [rows[i].name.GetText(rows[i].name) for i in (1, 2)] == ["Ana", "Beto"]
+    assert rows[2].tag._shown is False and "step 5/16" in rows[2].attune.GetText(rows[2].attune)
+    # below level 50 the status block has three lines and the guild heading hangs from the last one
+    me.m.player.level = 12
+    me.ns.UI.Refresh()
+    shown = [f.mine[i]._shown for i in range(1, 6)]
+    assert shown == [True, True, True, False, False]
+    # the wax seal closes the book
+    f.close._scripts["OnClick"](f.close)
+    assert f.IsShown(f) is False
+
+
+def test_copy_opens_a_parchment_card_with_the_list_selected(me):
+    me.receive("S|1|60|1|16|16|130")
+    me.ns.UI.Copy()
+    card = me.ns.UI.card
+    assert card.IsShown(card) and card.title.GetText(card.title) == "Copy list"
+    box = card.area.box
+    assert box.GetText(box).splitlines()[0] == "name,level,amulet,step,steps,fire"
+    assert "Ana,60,1,16,16,130" in box.GetText(box)
+
+
+def test_language_can_be_chosen_regardless_of_the_client(me):
+    me.lua.globals().SlashCmdList.LISTOSPARALARAID("")
+    f = me.ns.UI.frame
+    me.lua.globals().SlashCmdList.LISTOSPARALARAID("idioma es")
+    assert me.m.savedVariables("ListosParaLaRaidDB").find('["lang"] = "es"') != -1
+    assert "Amuleto de Fuego Dracónico" in me.lines().mine[2]
+    assert f.title.GetText(f.title) == "Listos para la raid" and f.copy.GetText(f.copy) == "Copiar lista"
+    me.lua.globals().SlashCmdList.LISTOSPARALARAID("lang en")
+    assert "Drakefire Amulet" in me.lines().mine[2] and f.title.GetText(f.title) == "Ready for the raid"
+    me.lua.globals().SlashCmdList.LISTOSPARALARAID("idioma auto")
+    assert "Drakefire Amulet" in me.lines().mine[2]
+    # the choice survives a relog, and nonsense falls back to auto
+    b = Client(saved=me.m.savedVariables("ListosParaLaRaidDB")).login()
+    assert b.ns.lang == "auto"
+    b.lua.globals().SlashCmdList.LISTOSPARALARAID("idioma es")
+    c = Client(saved=b.m.savedVariables("ListosParaLaRaidDB")).login()
+    assert c.ns.lang == "es" and "Amuleto" in c.lines().mine[2]
+    c.lua.globals().SlashCmdList.LISTOSPARALARAID("idioma klingon")
+    assert c.ns.lang == "auto"
 
 
 def test_saved_and_loaded():

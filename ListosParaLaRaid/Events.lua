@@ -51,8 +51,11 @@ end)
 SLASH_LISTOSPARALARAID1 = "/listos"
 SlashCmdList.LISTOSPARALARAID = function(msg)
 	msg = strtrim((msg or ""):lower())
+	local verb, arg = msg:match("^(%S+)%s*(.*)$")
 	if msg == "copiar" or msg == "copy" then
 		ns.UI.Copy()
+	elseif verb == "idioma" or verb == "lang" then
+		ns.ChooseLanguage(arg)
 	elseif msg == "help" or msg == "ayuda" then
 		ns.Print(L.HELP)
 	else

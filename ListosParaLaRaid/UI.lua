@@ -1,14 +1,17 @@
 local ADDON, ns = ...
 local L = ns.L
 
--- The panel: the countdown, your own status, and the guild's, ready players first.
+-- The window: a single parchment page (Pergamino.Book, single mode). The countdown as the big line, your
+-- own status in ink, the guild as a list with the ready ones first, and "Copiar lista" on a parchment card.
 
 local UI = {}
 ns.UI = UI
-local ROWS = 16
-local GREEN, RED, GREY = "|cff40c040", "|cffff5050", "|cff9d9d9d"
+local P = Pergamino
+-- inks for the inline colours (the texts are read by the tests, so they stay plain strings)
+local GREEN, RED, GREY = "|cff1d6e10", "|cff8f2a1d", "|cff6c4e31"
+local ROW_H = 22
 
--- Everything the panel says, as plain lines (the tests read them; the panel draws them).
+-- Everything the page says, as plain lines (the tests read them; the page draws them).
 function UI.Lines()
 	local out = {}
 	local days = ns.DaysLeft()
@@ -59,10 +62,21 @@ function UI.Lines()
 	end)
 	out.count = L.GUILD_COUNT:format(onyxia, sixty)
 	out.guild = {}
+	out.rows = {}
 	for _, e in ipairs(list) do
 		local st = e.s
 		local attune = st.am and (GREEN .. L.ROW_AMULET .. "|r") or (GREY .. L.ROW_STEP:format(st.st, st.of) .. "|r")
 		out.guild[#out.guild + 1] = L.ROW:format(e.name, st.lv, attune, L.ROW_FIRE:format(st.fr))
+		out.rows[#out.rows + 1] = {
+			name = e.name,
+			lv = st.lv,
+			am = st.am,
+			st = st.st,
+			of = st.of,
+			fr = st.fr,
+			ready = st.am and st.lv >= ns.LEVEL,
+			sixty = st.lv >= ns.LEVEL,
+		}
 	end
 	if not ns.GuildKey() then
 		out.note = L.NO_GUILD
@@ -91,91 +105,139 @@ function UI.ListText()
 	return table.concat(lines, "\n")
 end
 
-StaticPopupDialogs.LISTOSPARALARAID_COPY = {
-	text = "%s",
-	button1 = OKAY,
-	hasEditBox = 1,
-	editBoxWidth = 320,
-	OnShow = function(dialog, data)
-		local edit = dialog:GetEditBox()
-		edit:SetText(data or "")
-		edit:HighlightText()
-		edit:SetFocus()
-	end,
-	EditBoxOnEscapePressed = function(editBox)
-		editBox:GetParent():Hide()
-	end,
-	timeout = 0,
-	whileDead = 1,
-	hideOnEscape = 1,
-}
+-- "Copiar lista": a parchment card with the text selected, ready for Ctrl+C.
+local function copyCard()
+	if UI.card then
+		return UI.card
+	end
+	local card = P.Card(ADDON .. "CopyCard", 440, 320, L.COPY)
+	local hint = P.Label(card.body, L.COPY_PROMPT, "small")
+	hint:SetPoint("TOPLEFT")
+	hint:SetPoint("TOPRIGHT")
+	hint:SetWordWrap(true)
+	local area = P.TextArea(card.body)
+	area:SetPoint("TOPLEFT", hint, "BOTTOMLEFT", 0, -8)
+	area:SetPoint("BOTTOMRIGHT")
+	card.area = area
+	UI.card = card
+	return card
+end
 
 function UI.Copy()
-	StaticPopup_Show("LISTOSPARALARAID_COPY", L.COPY_PROMPT, nil, UI.ListText())
+	local card = copyCard()
+	card.area.box:SetText(UI.ListText())
+	card:Show()
+	local edit = card.area.box.GetEditBox and card.area.box:GetEditBox()
+	if edit then
+		if edit.HighlightText then
+			edit:HighlightText()
+		end
+		if edit.SetFocus then
+			edit:SetFocus()
+		end
+	end
+end
+
+-- a guild row: name · level · amulet or step · fire, and a gold tag when ready for Onyxia
+local function initRow(row, item)
+	if not row.name then
+		row.name = P.Label(row, "", "strong")
+		row.name:SetPoint("LEFT", 6, 0)
+		row.name:SetWidth(120)
+		row.name:SetWordWrap(false)
+		row.level = P.Label(row, "", "body", "CENTER")
+		row.level:SetPoint("LEFT", row.name, "RIGHT", 4, 0)
+		row.level:SetWidth(28)
+		row.attune = P.Label(row, "", "small")
+		row.attune:SetPoint("LEFT", row.level, "RIGHT", 6, 0)
+		row.attune:SetWidth(90)
+		row.attune:SetWordWrap(false)
+		row.fire = P.Label(row, "", "small", "RIGHT")
+		row.fire:SetPoint("RIGHT", -6, 0)
+		row.fire:SetWidth(56)
+		row.tag = P.Tag(row, L.TAG_READY, "pinned")
+		row.tag:SetPoint("RIGHT", row.fire, "LEFT", -6, 0)
+	end
+	row.name:SetText(item.name)
+	row.level:SetText(tostring(item.lv))
+	row.attune:SetText(item.am and (GREEN .. L.ROW_AMULET .. "|r") or (GREY .. L.ROW_STEP:format(item.st, item.of) .. "|r"))
+	row.fire:SetText(L.ROW_FIRE:format(item.fr))
+	row.tag:Set(L.TAG_READY, "pinned")
+	row.tag:SetShown(item.ready)
 end
 
 local function build()
-	local FRAME = ADDON .. "Frame"
-	local f = CreateFrame("Frame", FRAME, UIParent, "BasicFrameTemplateWithInset")
-	f:SetSize(460, 470)
-	f:SetPoint("CENTER")
-	f:SetFrameStrata("HIGH")
-	f:SetToplevel(true)
-	f:SetClampedToScreen(true)
-	f:SetMovable(true)
-	f:EnableMouse(true)
-	f:RegisterForDrag("LeftButton")
-	f:SetScript("OnDragStart", f.StartMoving)
-	f:SetScript("OnDragStop", f.StopMovingOrSizing)
-	f:Hide()
-	f.TitleText:SetText(L.TITLE)
-	tinsert(UISpecialFrames, FRAME)
+	local f = P.Book(ADDON .. "Frame", { title = L.TITLE, single = true, width = 480, height = 540 })
 	UI.frame = f
+	local page = f.left
 
-	f.countdown = f:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
-	f.countdown:SetPoint("TOPLEFT", 16, -34)
-	f.you = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-	f.you:SetPoint("TOPLEFT", 16, -64)
-	f.you:SetText(L.YOU)
+	f.countdown = P.Label(page, "", "big")
+	f.countdown:SetPoint("TOPLEFT")
+	f.countdown:SetPoint("TOPRIGHT")
+	f.countdown:SetWordWrap(true)
+
+	local rule = P.Rule(page)
+	rule:SetPoint("TOPLEFT", f.countdown, "BOTTOMLEFT", 0, -10)
+	rule:SetPoint("TOPRIGHT", f.countdown, "BOTTOMRIGHT", 0, -10)
+
+	f.you = P.Label(page, L.YOU, "heading")
+	f.you:SetPoint("TOPLEFT", rule, "BOTTOMLEFT", 0, -12)
 	f.mine = {}
+	local prev = f.you
 	for i = 1, 5 do
-		local line = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-		line:SetPoint("TOPLEFT", 24, -66 - i * 16)
-		line:SetPoint("RIGHT", -16, 0)
-		line:SetJustifyH("LEFT")
-		f.mine[i] = line
+		local ln = P.Label(page, "", "body")
+		ln:SetPoint("TOPLEFT", prev, "BOTTOMLEFT", i == 1 and 8 or 0, -4)
+		ln:SetPoint("RIGHT", page, "RIGHT", 0, 0)
+		ln:SetWordWrap(true)
+		f.mine[i] = ln
+		prev = ln
 	end
-	f.guildHead = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-	f.guildHead:SetPoint("TOPLEFT", 16, -176)
-	f.guildHead:SetText(L.GUILD)
-	f.count = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-	f.count:SetPoint("LEFT", f.guildHead, "RIGHT", 12, 0)
-	f.rows = {}
-	for i = 1, ROWS do
-		local row = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-		row:SetPoint("TOPLEFT", 24, -180 - i * 15)
-		row:SetPoint("RIGHT", -16, 0)
-		row:SetJustifyH("LEFT")
-		f.rows[i] = row
-	end
-	f.note = f:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
-	f.note:SetPoint("BOTTOMLEFT", 16, 44)
-	f.note:SetPoint("RIGHT", -16, 0)
-	f.note:SetJustifyH("LEFT")
+	f.guildHead = P.Label(page, L.GUILD, "heading")
+	f.guildHead:SetPoint("TOPLEFT", prev, "BOTTOMLEFT", -8, -16)
+	f.count = P.Label(page, "", "small")
+	f.count:SetPoint("LEFT", f.guildHead, "RIGHT", 10, 0)
+	f.count:SetPoint("RIGHT", page, "RIGHT", 0, 0)
+	f.count:SetWordWrap(false)
+
+	f.copy = P.Button(page, L.COPY, 140, UI.Copy)
+	f.copy:SetPoint("BOTTOMRIGHT", page, "BOTTOMRIGHT", 0, 0)
+
+	f.note = P.Label(page, "", "muted")
+	f.note:SetPoint("BOTTOMLEFT", page, "BOTTOMLEFT", 0, 4)
+	f.note:SetPoint("RIGHT", f.copy, "LEFT", -10, 0)
 	f.note:SetWordWrap(true)
-	f.copy = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
-	f.copy:SetSize(140, 24)
-	f.copy:SetPoint("BOTTOMRIGHT", -14, 12)
-	f.copy:SetText(L.COPY)
-	f.copy:SetScript("OnClick", UI.Copy)
+
+	local holder = P.Panel(page)
+	holder:SetPoint("TOPLEFT", f.guildHead, "BOTTOMLEFT", 0, -6)
+	holder:SetPoint("RIGHT", page, "RIGHT", -14, 0)
+	holder:SetPoint("BOTTOM", f.copy, "TOP", 0, 12)
+	f.list = P.List(holder, ROW_H, initRow)
+	f.list.box:SetPoint("TOPLEFT", 2, -2)
+	f.list.box:SetPoint("BOTTOMRIGHT", -2, 2)
+
 	f:SetScript("OnShow", function()
-		PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
+		if PlaySound and SOUNDKIT and SOUNDKIT.IG_SPELLBOOK_OPEN then
+			PlaySound(SOUNDKIT.IG_SPELLBOOK_OPEN)
+		end
 		UI.Refresh()
 	end)
-	f:SetScript("OnHide", function()
-		PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE)
-	end)
 	return f
+end
+
+-- The static texts, again: the language can change after the page was built.
+function UI.ApplyTexts()
+	local f = UI.frame
+	if not f then
+		return
+	end
+	f:SetTitle(L.TITLE)
+	f.you:SetText(L.YOU)
+	f.guildHead:SetText(L.GUILD)
+	f.copy:SetText(L.COPY)
+	if UI.card then
+		UI.card.title:SetText(L.COPY)
+	end
+	UI.Refresh()
 end
 
 function UI.Refresh()
@@ -185,13 +247,20 @@ function UI.Refresh()
 	end
 	local lines = UI.Lines()
 	f.countdown:SetText(lines.countdown)
+	local last = f.you
 	for i, fs in ipairs(f.mine) do
-		fs:SetText(lines.mine[i] or "")
+		local text = lines.mine[i]
+		fs:SetText(text or "")
+		fs:SetShown(text ~= nil)
+		if text then
+			last = fs
+		end
 	end
+	-- the guild block hangs from the last line that has text, so the page has no gap when there are fewer
+	f.guildHead:ClearAllPoints()
+	f.guildHead:SetPoint("TOPLEFT", last, "BOTTOMLEFT", last == f.you and 0 or -8, -16)
 	f.count:SetText(lines.count)
-	for i, fs in ipairs(f.rows) do
-		fs:SetText(lines.guild[i] or "")
-	end
+	f.list:SetData(lines.rows, true)
 	f.note:SetText(lines.note or "")
 end
 
@@ -202,3 +271,4 @@ end
 
 ns.On("guild", UI.Refresh)
 ns.On("status", UI.Refresh)
+ns.On("lang", UI.ApplyTexts)

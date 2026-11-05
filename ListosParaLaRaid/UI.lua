@@ -15,7 +15,7 @@ local ROW_H = 22
 function UI.Lines()
 	local out = {}
 	local days = ns.DaysLeft()
-	out.countdown = days > 0 and L.COUNTDOWN:format(days) or (days == 0 and L.COUNTDOWN_TODAY or L.COUNTDOWN_OPEN)
+	out.countdown = days > 1 and L.COUNTDOWN:format(days) or days == 1 and L.COUNTDOWN_1 or (days == 0 and L.COUNTDOWN_TODAY or L.COUNTDOWN_OPEN)
 	local s = ns.MyStatus()
 	local mine = {
 		L.LEVEL:format(s.lv),
@@ -23,7 +23,8 @@ function UI.Lines()
 	}
 	-- below the attunement's level the steps and the fire resistance would only nag: say what comes first
 	if s.lv < ns.CHAIN_LEVEL then
-		mine[#mine + 1] = L.LEVELS_TO_GO:format(ns.LEVEL - s.lv, ns.CHAIN_LEVEL)
+		local toGo = ns.LEVEL - s.lv
+		mine[#mine + 1] = toGo == 1 and L.LEVELS_TO_GO_1:format(ns.CHAIN_LEVEL) or L.LEVELS_TO_GO:format(toGo, ns.CHAIN_LEVEL)
 	else
 		if not s.am and s.of > 0 then
 			mine[#mine + 1] = L.STEP:format(s.st, s.of)
@@ -38,8 +39,16 @@ function UI.Lines()
 	out.mine = mine
 
 	local list = {}
+	local others = 0
 	for name, st in pairs(ns.Guild()) do
 		list[#list + 1] = { name = name, s = st }
+		if name ~= ns.Me() then
+			others = others + 1
+		end
+	end
+	-- your own row is always there, guild or not (before the first sync the guild table has nobody)
+	if #list == others then
+		list[#list + 1] = { name = ns.Me(), s = s }
 	end
 	local onyxia, sixty = 0, 0
 	for _, e in ipairs(list) do
@@ -82,7 +91,7 @@ function UI.Lines()
 		out.note = L.NO_GUILD
 	elseif ns.IsTrial() then
 		out.note = L.TRIAL
-	elseif #list == 0 then
+	elseif others == 0 then
 		out.note = L.NOBODY
 	end
 	return out
@@ -168,6 +177,8 @@ end
 
 local function build()
 	local f = P.Book(ADDON .. "Frame", { title = L.TITLE, single = true, width = 480, height = 540 })
+	-- clicking the page brings the whole of it over any other book that is open
+	f:SetToplevel(true)
 	UI.frame = f
 	local page = f.left
 

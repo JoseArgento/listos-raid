@@ -193,6 +193,15 @@ def test_no_guild_shows_only_you():
     c.timers()
     assert c.take_sent() == []
     assert "not in a guild" in c.lines().note
+    # the list still has one row: yours
+    rows = c.lines().rows
+    assert len(rows) == 1 and rows[1].name == "Solo"
+
+
+def test_your_row_is_there_before_anyone_answers(me):
+    rows = me.lines().rows
+    assert [rows[i].name for i in range(1, len(rows) + 1)] == ["Josecito"]
+    assert "Nobody" in me.lines().note or "nobody" in me.lines().note.lower()
 
 
 def test_secret_values_count_as_nothing(me):
@@ -219,14 +228,14 @@ def test_the_page_is_a_single_parchment_book(me):
     assert "34 days" in f.countdown.GetText(f.countdown) or "days to go" in f.countdown.GetText(f.countdown)
     # the guild lives in a list whose rows carry name, level, step/amulet and fire; Ana is ready for Onyxia
     rows = f.list.box.rows
-    assert len(rows) == 1
+    assert len(rows) == 2  # Ana and you (your own row is always listed)
     assert rows[1].name.GetText(rows[1].name) == "Ana" and rows[1].level.GetText(rows[1].level) == "60"
     assert "amulet" in rows[1].attune.GetText(rows[1].attune) and "fire 130" in rows[1].fire.GetText(rows[1].fire)
     assert rows[1].tag._shown is True
     # a guildmate who is not ready gets no tag and sorts after Ana
     me.receive("S|1|58|0|5|16|20", sender="Beto-Forever")
     rows = f.list.box.rows
-    assert [rows[i].name.GetText(rows[i].name) for i in (1, 2)] == ["Ana", "Beto"]
+    assert [rows[i].name.GetText(rows[i].name) for i in (1, 2, 3)] == ["Ana", "Beto", "Josecito"]
     assert rows[2].tag._shown is False and "step 5/16" in rows[2].attune.GetText(rows[2].attune)
     # below level 50 the status block has three lines and the guild heading hangs from the last one
     me.m.player.level = 12

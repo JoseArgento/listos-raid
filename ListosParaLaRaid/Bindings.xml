@@ -1,0 +1,5 @@
+<Bindings>
+	<Binding name="LISTOSPARALARAID_TOGGLE" header="LISTOSPARALARAID" category="ADDONS">
+		ListosParaLaRaid_Toggle()
+	</Binding>
+</Bindings>

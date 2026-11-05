@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0 (unreleased)
+
+- Below level 50 the window says how many levels are left and that the attunement starts at 50, instead of "step 0 of 16" and "not ready".
+- Own icon in the addon compartment and a key binding to open the window.
+- The fire-resistance hint no longer uses an emoji the game's font can't draw.
+
 ## 0.1.0 (unreleased)
 
 First version, for WoW Forever 1.60.1.

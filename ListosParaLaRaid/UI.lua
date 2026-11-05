@@ -18,15 +18,20 @@ function UI.Lines()
 		L.LEVEL:format(s.lv),
 		L.AMULET .. ": " .. (s.am and (GREEN .. L.AMULET_YES .. "|r") or (RED .. L.AMULET_NO .. "|r")),
 	}
-	if not s.am and s.of > 0 then
-		mine[#mine + 1] = L.STEP:format(s.st, s.of)
+	-- below the attunement's level the steps and the fire resistance would only nag: say what comes first
+	if s.lv < ns.CHAIN_LEVEL then
+		mine[#mine + 1] = L.LEVELS_TO_GO:format(ns.LEVEL - s.lv, ns.CHAIN_LEVEL)
+	else
+		if not s.am and s.of > 0 then
+			mine[#mine + 1] = L.STEP:format(s.st, s.of)
+		end
+		mine[#mine + 1] = s.fr >= ns.FIRE_GOAL and L.FIRE:format(s.fr) or L.FIRE_HINT:format(s.fr, ns.FIRE_GOAL)
+		local ready = {}
+		for _, key in ipairs(ns.ReadyFor(s)) do
+			ready[#ready + 1] = L["RAID_" .. key]
+		end
+		mine[#mine + 1] = #ready > 0 and L.READY_FOR:format(table.concat(ready, ", ")) or L.NOT_YET
 	end
-	mine[#mine + 1] = s.fr >= ns.FIRE_GOAL and L.FIRE:format(s.fr) or L.FIRE_HINT:format(s.fr, ns.FIRE_GOAL)
-	local ready = {}
-	for _, key in ipairs(ns.ReadyFor(s)) do
-		ready[#ready + 1] = L["RAID_" .. key]
-	end
-	mine[#mine + 1] = #ready > 0 and L.READY_FOR:format(table.concat(ready, ", ")) or L.NOT_YET
 	out.mine = mine
 
 	local list = {}

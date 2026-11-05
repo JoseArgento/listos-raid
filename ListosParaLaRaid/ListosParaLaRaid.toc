@@ -6,7 +6,7 @@
 ## Author: José Argento
 ## Version: @project-version@
 ## SavedVariables: ListosParaLaRaidDB
-## IconTexture: Interface\Icons\INV_Misc_Note_02
+## IconTexture: Interface\AddOns\ListosParaLaRaid\Media\icon
 ## AddonCompartmentFunc: ListosParaLaRaid_OnAddonCompartmentClick
 ## AddonCompartmentFuncOnEnter: ListosParaLaRaid_OnAddonCompartmentEnter
 ## AddonCompartmentFuncOnLeave: ListosParaLaRaid_OnAddonCompartmentLeave
@@ -18,3 +18,4 @@ Core.lua
 Sync.lua
 UI.lua
 Events.lua
+Bindings.xml

@@ -72,3 +72,10 @@ end
 function ListosParaLaRaid_OnAddonCompartmentLeave()
 	GameTooltip:Hide()
 end
+
+-- Key binding (Bindings.xml) and its names in the key bindings panel.
+_G["ListosParaLaRaid_Toggle"] = function()
+	ns.UI.Toggle()
+end
+_G["BINDING_HEADER_LISTOSPARALARAID"] = "Listos para la raid"
+_G["BINDING_NAME_LISTOSPARALARAID_TOGGLE"] = L.BINDING_TOGGLE

@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local L = {
+	BINDING_TOGGLE = "Open / close",
 	TITLE = "Ready for the raid",
 	COUNTDOWN = "Raids open on December 9: %d days to go",
 	COUNTDOWN_TODAY = "Raids open today!",
@@ -11,6 +12,7 @@ local L = {
 	AMULET_YES = "in your bags",
 	AMULET_NO = "missing",
 	STEP = "Attunement: step %d of %d",
+	LEVELS_TO_GO = "%d levels to go. The attunement starts at level %d.",
 	FIRE = "Fire resistance: %d",
 	FIRE_HINT = "Fire resistance: %d (aim for about %d, a common target; there is no official number yet)",
 	READY_FOR = "Ready for: %s",
@@ -34,6 +36,7 @@ local L = {
 }
 
 local es = {
+	BINDING_TOGGLE = "Abrir / cerrar",
 	TITLE = "Listos para la raid",
 	COUNTDOWN = "Las raids abren el 9 de diciembre: faltan %d días",
 	COUNTDOWN_TODAY = "¡Las raids abren hoy!",
@@ -44,6 +47,7 @@ local es = {
 	AMULET_YES = "en tus bolsas",
 	AMULET_NO = "te falta",
 	STEP = "Sintonización: paso %d de %d",
+	LEVELS_TO_GO = "Te faltan %d niveles. La sintonización arranca en el nivel %d.",
 	FIRE = "Resistencia al fuego: %d",
 	FIRE_HINT = "Resistencia al fuego: %d (apuntá a unos %d, un objetivo común; todavía no hay número oficial)",
 	READY_FOR = "Listo para: %s",

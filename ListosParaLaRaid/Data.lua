@@ -8,6 +8,7 @@ local _, ns = ...
 
 ns.OPEN = { year = 2026, month = 12, day = 9 } -- ⏳ the hour depends on the region's weekly reset
 ns.LEVEL = 60
+ns.CHAIN_LEVEL = 50 -- the first quest of the Onyxia chain needs level 50 (Classic's requirement; Forever's ⏳)
 ns.AMULET = 16309 -- Drakefire Amulet
 ns.FIRE_GOAL = 100 -- a common target for Onyxia's breath (guides: "build fire resistance"); only a hint
 

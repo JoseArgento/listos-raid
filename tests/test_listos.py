@@ -16,7 +16,7 @@ ALLIANCE = [4182, 4183, 4184, 4185, 4186, 4223, 4224, 4241, 4242, 4264, 4282, 43
 
 def toc_files():
     lines = (ADDON / "ListosParaLaRaid.toc").read_text(encoding="utf-8").splitlines()
-    return [ln.strip().replace("\\", "/") for ln in lines if ln.strip() and not ln.startswith("#")]
+    return [ln.strip().replace("\\", "/") for ln in lines if ln.strip() and not ln.startswith("#") and ln.strip().endswith(".lua")]
 
 
 class Client:
@@ -234,3 +234,13 @@ def test_compartment(me):
     g.ListosParaLaRaid_OnAddonCompartmentClick()
     g.ListosParaLaRaid_OnAddonCompartmentEnter(None, me.ns.UI.frame)
     g.ListosParaLaRaid_OnAddonCompartmentLeave()
+
+
+def test_below_the_chain_level_the_window_says_what_comes_first(me):
+    me.m.player.level = 12
+    mine = list(me.lines().mine.values())
+    assert any("48 levels to go" in ln and "level 50" in ln for ln in mine)
+    assert not any("step" in ln or "Fire resistance" in ln or "Not ready" in ln for ln in mine)
+    me.m.player.level = 50
+    mine = list(me.lines().mine.values())
+    assert any("Attunement: step" in ln for ln in mine) and any("Fire resistance" in ln for ln in mine)

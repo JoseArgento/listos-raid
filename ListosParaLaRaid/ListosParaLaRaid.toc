@@ -5,6 +5,7 @@
 ## Notes-esMX: Quién de tu guild está listo para las raids del 9 de diciembre: nivel, el Amuleto de Fuego Dracónico y resistencia al fuego.
 ## Author: José Argento
 ## Version: @project-version@
+## X-Curse-Project-ID: 1787076
 ## SavedVariables: ListosParaLaRaidDB
 ## IconTexture: Interface\AddOns\ListosParaLaRaid\Media\icon
 ## AddonCompartmentFunc: ListosParaLaRaid_OnAddonCompartmentClick

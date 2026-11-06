@@ -37,7 +37,7 @@ local en = {
 	COPY = "Copy list",
 	COPY_PROMPT = "Copy with Ctrl+C (name, level, amulet, attunement step, fire resistance):",
 	TAG_READY = "ready for Onyxia",
-	HELP = "/listos opens the page. /listos copiar gives you the guild list as text. /listos idioma es|en|auto picks the language. /listos minimapa on|off shows or hides the minimap button. /listos errores shows the addon's own errors to copy.",
+	HELP = "/listos opens the page. /listos copiar gives you the guild list as text. /listos idioma es|en|auto picks the language. /listos minimapa on|off shows or hides the minimap button; /listos minimapa juntar on|off puts every addon of the family in one button. /listos errores shows the addon's own errors to copy.",
 	ERR_TITLE = "Errors",
 	ERR_NOTICE = "had an error. /listos errores shows it to copy.",
 	ERR_EMPTY = "No errors kept.",
@@ -49,6 +49,8 @@ local en = {
 	MINIMAP_TIP = "Click: who is ready. Drag to move it around the minimap. /listos minimapa off hides it.",
 	MINIMAP_ON = "Minimap button on.",
 	MINIMAP_OFF = "Minimap button off (/listos minimapa on brings it back).",
+	MINIMAP_MERGED_ON = "One minimap button for the whole family (/listos minimapa juntar off splits them again).",
+	MINIMAP_MERGED_OFF = "Each addon has its own minimap button again.",
 }
 
 local es = {
@@ -85,7 +87,7 @@ local es = {
 	COPY = "Copiar lista",
 	COPY_PROMPT = "Copiá con Ctrl+C (nombre, nivel, amuleto, paso de la sintonización, resistencia al fuego):",
 	TAG_READY = "lista para Onyxia",
-	HELP = "/listos abre la página. /listos copiar te da la lista de la guild como texto. /listos idioma es|en|auto elige el idioma. /listos minimapa on|off muestra o esconde el botón del minimapa. /listos errores muestra los errores del addon para copiarlos.",
+	HELP = "/listos abre la página. /listos copiar te da la lista de la guild como texto. /listos idioma es|en|auto elige el idioma. /listos minimapa on|off muestra o esconde el botón del minimapa; /listos minimapa juntar on|off junta los addons de la familia en un solo botón. /listos errores muestra los errores del addon para copiarlos.",
 	ERR_TITLE = "Errores",
 	ERR_NOTICE = "tuvo un error. /listos errores lo muestra para copiarlo.",
 	ERR_EMPTY = "Sin errores guardados.",
@@ -97,6 +99,8 @@ local es = {
 	MINIMAP_TIP = "Clic: quién está listo. Arrastralo para moverlo alrededor del minimapa. /listos minimapa off lo esconde.",
 	MINIMAP_ON = "Botón del minimapa encendido.",
 	MINIMAP_OFF = "Botón del minimapa apagado (/listos minimapa on lo devuelve).",
+	MINIMAP_MERGED_ON = "Un solo botón de minimapa para toda la familia (/listos minimapa juntar off los separa).",
+	MINIMAP_MERGED_OFF = "Cada addon vuelve a tener su botón de minimapa.",
 }
 
 local L = {}

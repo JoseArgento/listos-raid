@@ -345,3 +345,30 @@ def test_a_handler_error_is_kept_and_shown_not_thrown():
     assert "se rompio el aviso" in me.run("return ns.UI.errorsCard.page.area.box._text")
     me.run("ns.UI.errorsCard.page.clear:GetScript('OnClick')()")
     assert me.run("return #ns.db.errors") == 0
+
+
+def test_merging_the_minimap_buttons_hides_ours_and_the_hub_lists_it(me):
+    b = me.lua.globals().ListosParaLaRaidMinimapButton
+    entries = me.run("return Pergamino.MinimapHub.Entries()")
+    assert [e.label for e in entries.values()] == ["Ready for the raid"]
+    me.lua.globals().SlashCmdList.LISTOSPARALARAID("minimapa juntar on")
+    assert me.run("return ns.db.settings.minimapMerged") is True
+    assert me.run("return Pergamino.MinimapHub.IsMerged()") is True
+    assert b._shown is False
+    hub = me.lua.globals().PergaminoMinimapHub
+    assert hub is not None and hub._shown is True
+    # a new session puts the setting back from the saved variables
+    again = Client(saved=me.m.savedVariables("ListosParaLaRaidDB")).login()
+    assert again.run("return Pergamino.MinimapHub.IsMerged()") is True
+    again.lua.globals().SlashCmdList.LISTOSPARALARAID("minimapa juntar off")
+    assert again.lua.globals().ListosParaLaRaidMinimapButton._shown is True
+
+
+def test_an_error_in_the_minimap_click_or_the_compartment_is_kept(me):
+    me.run("ns.UI.Toggle = function() error('se rompio el libro') end")
+    me.run("ns.MinimapButton():GetScript('OnClick')(ns.MinimapButton(), 'LeftButton')")  # does not raise
+    me.run("ListosParaLaRaid_OnAddonCompartmentClick()")  # does not raise
+    errs = me.run("return ns.guard.Errors()")
+    labels = sorted(e.label for e in errs.values())
+    assert labels == ["compartment", "minimap"]
+    assert all("se rompio el libro" in e.message for e in errs.values())

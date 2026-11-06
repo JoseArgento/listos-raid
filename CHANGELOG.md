@@ -2,6 +2,7 @@
 
 ## 0.2.0 (unreleased)
 
+- **Minimap button like the game's** (Pergamino 7): gold bevelled ring, dark disc, shadow, a cream icon; `/listos minimapa juntar on|off` puts every addon of the family into one button with a menu. Errors in the minimap button and the addon compartment are kept too (`/listos errores`).
 - **Its own errors, kept** (Pergamino 5): a Lua error in a handler no longer reaches the player as a popup; it is kept in `ListosParaLaRaidDB.errors` (last 10), said once in the chat, and `/listos errores` opens a card to copy it into a GitHub issue.
 - **Minimap button** of our own (Pergamino 2): a click opens the page, drag it around the minimap; `/listos minimapa on|off`. Pergamino 2 also brings scroll bars only when the list overflows.
 - **Your own row** is always in the list, with or without a guild (before, a player without a guild saw an empty list).

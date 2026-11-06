@@ -61,7 +61,14 @@ onSlash = function(msg)
 	elseif verb == "idioma" or verb == "lang" then
 		ns.ChooseLanguage(arg)
 	elseif verb == "minimapa" or verb == "minimap" then
-		if arg == "on" or arg == "off" then
+		local sub, val = arg:match("^(%S+)%s*(%S*)$")
+		if sub == "juntar" or sub == "merge" then
+			if val == "on" or val == "off" then
+				ns.SetMinimapMerged(val == "on")
+			else
+				ns.SetMinimapMerged(not ns.db.settings.minimapMerged)
+			end
+		elseif arg == "on" or arg == "off" then
 			ns.SetMinimapShown(arg == "on")
 		else
 			ns.SetMinimapShown(ns.db.settings.minimap == false)
@@ -76,8 +83,13 @@ onSlash = function(msg)
 end
 SlashCmdList.LISTOSPARALARAID = onSlash
 
+-- the addon compartment is not a frame, so its click is wrapped by hand (an error is kept, not thrown)
 function ListosParaLaRaid_OnAddonCompartmentClick()
-	ns.UI.Toggle()
+	if ns.guard then
+		ns.guard.Wrap(ns.UI.Toggle, "compartment")()
+	else
+		ns.UI.Toggle()
+	end
 end
 function ListosParaLaRaid_OnAddonCompartmentEnter(_, button)
 	GameTooltip:SetOwner(button, "ANCHOR_LEFT")

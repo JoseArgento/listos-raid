@@ -6,6 +6,8 @@ El 9 de diciembre abren las primeras raids de **WoW Forever**: The Barrow Deeps 
 
 ![Listos para la raid en el juego](docs/libro.png)
 
+**Descargar:** en [CurseForge](https://www.curseforge.com/wow/addons/listos-para-la-raid) (también con la app de CurseForge o WowUp) o el zip de las [releases](https://github.com/JoseArgento/listos-raid/releases).
+
 **Contenido**
 
 - [Qué muestra](#qué-muestra)

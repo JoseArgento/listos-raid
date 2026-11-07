@@ -6,6 +6,8 @@ On December 9 the first **WoW Forever** raids open: The Barrow Deeps (10 players
 
 ![Ready for the raid in the game](docs/libro.png)
 
+**Download:** on [CurseForge](https://www.curseforge.com/wow/addons/listos-para-la-raid) (also through the CurseForge app or WowUp) or the zip from the [releases](https://github.com/JoseArgento/listos-raid/releases).
+
 - **Countdown** to 12/9.
 - **You:** level, whether you hold the Drakefire Amulet (bags or bank), your step in Onyxia's attunement (16 for the Alliance, 14 for the Horde), fire resistance, and which raids you are ready for.
 - **Your guild:** everyone's level, amulet or step, and fire, ready players first, with "Ready: 12 for Onyxia, 20 at level 60" on top.

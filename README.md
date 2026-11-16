@@ -47,7 +47,7 @@ Copiá la carpeta `ListosParaLaRaid` a `Interface\AddOns\`, dentro de la carpeta
 **Probado:**
 - ✅ Cada función y evento existe en Forever 1.60.1 (`tools/check_api.py` contra los dumps de [Ketho/BlizzardInterfaceResources](https://github.com/Ketho/BlizzardInterfaceResources) y la UI de [Gethe/wow-ui-source](https://github.com/Gethe/wow-ui-source), rama `forever`). La resistencia se lee igual que la ficha de personaje de Forever: `UnitResistance(unidad, Enum.Damageclass.Fire)`, tercer valor.
 - ✅ [forever-lint](https://github.com/JoseArgento/forever-lint): solo la nota FL012 (cuentas de prueba), que el addon ya maneja. [Addon Sentry](https://github.com/JoseArgento/addon-sentry): "Sin señales de riesgo".
-- ✅ **36 tests** en Lua 5.1, con varios jugadores de la misma guild pasándose el estado.
+- ✅ **37 tests** en Lua 5.1, con varios jugadores de la misma guild pasándose el estado.
 
 **En el cliente** (desde el lanzamiento): la página, el estado propio, la cuenta regresiva, "Copiar lista" y el botón del minimapa, sin guild.
 

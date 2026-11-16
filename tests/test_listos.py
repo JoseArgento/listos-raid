@@ -372,3 +372,23 @@ def test_an_error_in_the_minimap_click_or_the_compartment_is_kept(me):
     labels = sorted(e.label for e in errs.values())
     assert labels == ["compartment", "minimap"]
     assert all("se rompio el libro" in e.message for e in errs.values())
+
+
+def test_my_own_status_coming_back_is_not_one_more_guildmate():
+    # Forever (seen 16/11): UnitName gives "Rumie", the sender of my own message is "Rumie Victoria"; I was on the
+    # guild's list twice
+    me = Client("Rumie")
+    me.m.player.realm = "Victoria"
+    me.run("table.insert(MOCK.roster, { 'Rumie Victoria', 2 }); UnitFullName = function() return 'Rumie', 'Victoria' end")
+    me.login()
+    me.receive("S|1|31|0|0|16|0", sender="Rumie Victoria")
+    assert "Rumie Victoria" not in me.guild()
+    me.receive("S|1|60|1|16|16|130", sender="Ana-Forever")
+    assert "Ana-Forever" in me.guild()
+    # what an older version kept is dropped at login
+    me.run("ns.Guild()['Rumie Victoria'] = { lv = 31, am = false, st = 0, of = 16, fr = 0, t = time() }")
+    again = Client("Rumie", saved=me.m.savedVariables("ListosParaLaRaidDB"))
+    again.m.player.realm = "Victoria"
+    again.run("UnitFullName = function() return 'Rumie', 'Victoria' end")
+    again.login()
+    assert "Rumie Victoria" not in again.guild() and "Ana-Forever" in again.guild()

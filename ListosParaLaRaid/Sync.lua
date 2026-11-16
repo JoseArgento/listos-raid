@@ -116,7 +116,8 @@ function ns.OnAddonMessage(prefix, text, channel, sender)
 		return
 	end
 	sender = Ambiguate(sender, "none")
-	if sender == ns.Me() or not allowed(sender) then
+	-- my own message coming back: Forever senders are "Name Second", which UnitName never equals
+	if Pergamino.IsMe(sender) or not allowed(sender) then
 		return
 	end
 	if text == "Q|1" then

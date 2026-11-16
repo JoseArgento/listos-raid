@@ -35,6 +35,15 @@ frame:SetScript("OnEvent", function(_, event, ...)
 			SlashCmdList.LISTOSPARALARAID = ns.guard.Install(frame, onSlash)
 		end
 	elseif event == "PLAYER_LOGIN" then
+		-- before 0.3.0 my own status came back from the guild channel under my two-part name and was kept as
+		-- one more guildmate: I was on the list twice
+		for _, guild in pairs(ns.db.guilds) do
+			for name in pairs(guild) do
+				if Pergamino.IsMe(name) then
+					guild[name] = nil
+				end
+			end
+		end
 		C_ChatInfo.RegisterAddonMessagePrefix(ns.PREFIX)
 		for e in pairs(handlers) do
 			frame:RegisterEvent(e)

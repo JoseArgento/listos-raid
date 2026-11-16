@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 (unreleased)
+## 0.3.0 (2026-11-16)
 
 - **You were on the guild's list twice.** In Forever the sender of a message arrives as "Name Second", which never equals `UnitName`: the echo of your own status was kept as one more guildmate. Fixed (Pergamino 9, `IsMe`); the copy is dropped at login.
 - **The button no longer stays outside the family's one minimap button** (Pergamino 8). With "one button for the family" chosen in another addon, an addon that showed its own button afterwards sat outside the hub (seen with Taller). The choice is now saved in every addon of the family, so it holds whichever ones are enabled (`/listos minimapa juntar on|off` from any of them), and the merged button remembers where you dragged it.
